@@ -3,7 +3,7 @@ package com.company;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Fields extends QueryMethods {
+public class Fields  {
    private String tableName;
    private String pname;
    private String lastName;
