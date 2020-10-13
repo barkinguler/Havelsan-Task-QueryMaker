@@ -1,8 +1,5 @@
 package com.company.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Fields  {
    private String tableName;
    private String pname;
@@ -10,7 +7,10 @@ public class Fields  {
    private int age;
    private String position;
    private boolean decision;
+public Fields(){
 
+
+}
 
     public Fields(String tableName, String pname, String lastName, int age, String position, boolean decision) {
         this.tableName = tableName;
