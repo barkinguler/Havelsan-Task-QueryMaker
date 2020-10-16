@@ -30,10 +30,10 @@ public class Context {
         strategy.Delete(tableName,fieldname,conditionvalue);
     }
 
-    public <T> void executeFind(String tableName, String fieldname, T conditionvalue){
+    public <T> void executeFind(String tableName, String fieldname, T conditionvalue,int limit){
 
 
-        strategy.Find(tableName,fieldname,conditionvalue);
+        strategy.Find(tableName,fieldname,conditionvalue,limit);
     }
 
 }

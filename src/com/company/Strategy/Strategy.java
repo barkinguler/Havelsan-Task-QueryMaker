@@ -7,6 +7,6 @@ public interface Strategy {
     public <T> void Insert(Map<String, Object> hashMap);
     public <T> void Update(String tableName, String field, T newvalue);
     public <T> void Delete(String tableName, String fieldname, T conditionvalue);
-    public <T> void Find(String tableName, String fieldname, T conditionvalue);
+    public <T> void Find(String tableName, String fieldname, T conditionvalue,int limit);
 
 }

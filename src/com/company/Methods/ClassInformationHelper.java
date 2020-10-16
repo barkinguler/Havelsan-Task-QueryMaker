@@ -3,18 +3,11 @@ package com.company.Methods;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-public class Helper {
+public class ClassInformationHelper {
 
 
-    public <T> Class ClassInformation(String fileName, String Package) throws ClassNotFoundException {
-
-        Class m = Class.forName("com.company." + Package + "." + fileName);
-
-
-        return m;
-    }
-
-    public <T> Map<String, Object> getHashMap(Class cls, T object) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public <T> Map<String, Object> getHashMap(String fileName, String Package, T object) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, ClassNotFoundException {
+        Class cls = Class.forName("com.company." + Package + "." + fileName);
         Map<String, Object> hash = new HashMap<String, Object>();
         for (int i = 0; i < cls.getDeclaredFields().length; i++) {
             Object obje;

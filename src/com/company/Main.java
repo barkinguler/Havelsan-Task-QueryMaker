@@ -1,42 +1,43 @@
 package com.company;
 
+import com.company.Context.Context;
 import com.company.Data.Fields;
-import com.company.Data.Fields2;
-import com.company.Methods.Helper;
-import com.company.Methods.QueryMethods;
+import com.company.Methods.ClassInformationHelper;
+import com.company.Methods.OracleQueryMethods;
+import com.company.Methods.PostgreQueryMethods;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.security.Signature;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Map;
 
 public class Main {
 
     public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+
+        Context context=null;
         Fields fields1 = new Fields("TABLEE1", "pname1", "lastname1", 25, "developer", true);
-        Fields2 fields2 = new Fields2("TABLEE2", 12, "bekir", "hatice");
+        ClassInformationHelper classInformationHelper = new ClassInformationHelper();
+        Map map=classInformationHelper.getHashMap("Fields", "Data",fields1);
 
-        QueryMethods q = new QueryMethods();
-        Helper helper = new Helper();
-		System.out.println("Birinci sınıf için örnek sorgular");
-        Class cls1 = helper.ClassInformation("Fields", "Data");
+		System.out.println("Oracle için örnek sorgular");
 
-        q.OracleCreate(helper.getHashMap(cls1,fields1));
-        q.OracleInsert(helper.getHashMap(cls1, fields1));
-        q.OracleFind("TAABLEE1", "age", 12);
-        q.OracleDelete("TABLEE1","pname","denemeisim");
-        q.OracleUpdate("TABLEE1","decision",false);
+        context=new Context(new OracleQueryMethods());
 
-		System.out.println("\nİkinci sınıf için örnek sorgular");
-		Class cls2 = helper.ClassInformation("Fields2", "Data");
+        context.executeCreate(map);
+        context.executeInsert(map);
+        context.executeFind("TAABLEE1", "age", 12,5);
+        context.executeDelete("TABLEE1","pname","denemeisim");
+        context.executeUpdate("TABLEE1","decision",false);
 
-		q.OracleCreate(helper.getHashMap(cls2,fields2));
-		q.OracleInsert(helper.getHashMap(cls2, fields2));
-		q.OracleFind("TAABLEE2", "id", 12);
-		q.OracleDelete("TABLEE2","fathername","denemeisim");
-		q.OracleUpdate("TABLEE2","mothername","denemeanneisim");
+
+        System.out.println("\nPostgre  için örnek sorgular");
+
+		context=new Context(new PostgreQueryMethods());
+
+        context.executeCreate(map);
+        context.executeInsert(map);
+        context.executeFind("TAABLEE1", "age", 12,5);
+        context.executeDelete("TABLEE1","pname","denemeisim");
+        context.executeUpdate("TABLEE1","decision",false);
 
 
 
