@@ -87,7 +87,7 @@ public class PostgreQueryMethods implements Strategy {
         if (conditionvalue.getClass().equals(Boolean.class)) {
             query = "DELETE FROM " + tableName + " WHERE " + fieldname + "=" + ((Boolean) conditionvalue ? true : false);
         } else if (conditionvalue.getClass().equals(String.class)) {
-            query = "DELETE FROM " + tableName + " WHERE " + fieldname + "='" + conditionvalue+"'";
+            query = "DELETE FROM " + tableName + " WHERE " + fieldname + "='" + conditionvalue + "'";
         } else {
             query = "DELETE FROM " + tableName + " WHERE " + fieldname + "=" + conditionvalue;
         }
