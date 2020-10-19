@@ -6,104 +6,167 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class PostgreQueryMethods implements Strategy {
+
     @Override
     public void Create(Map<String, Object> hashMap) {
-        String query = "CREATE TABLE IF NOT EXISTS ";
+        StringBuilder query = new StringBuilder();
         Iterator iter = hashMap.entrySet().iterator();
-        int counter = 0;
+
+        query.append("CREATE TABLE IF NOT EXISTS ");
         while (iter.hasNext()) {
 
             Map.Entry pair = (Map.Entry) iter.next();
 
-            if (pair.getKey().equals("TableName"))
-                query = query + pair.getValue() + "(";
+            if (pair.getKey().equals("TableName")) {
+                query.append(pair.getValue());
+                query.append("(");
+            } else {
 
-            else {
-                query = query + pair.getKey();
-
+                query.append(pair.getKey());
                 if (pair.getValue().getClass().equals(Integer.class))
-                    query = query + " INTEGER,";
-                else if (pair.getValue().getClass().equals(Float.class))
-                    query = query + " FLOAT,";
-                else if (pair.getValue().getClass().equals(String.class))
-                    query = query + " VARCHAR(50),";
-                else if (pair.getValue().getClass().equals(Boolean.class))
-                    query = query + " BOOLEAN,";
+                    query.append(" INTEGER,");
 
+                else if (pair.getValue().getClass().equals(Float.class))
+
+                    query.append(" FLOAT,");
+                else if (pair.getValue().getClass().equals(String.class))
+                    query.append(" VARCHAR(50),");
+
+                else if (pair.getValue().getClass().equals(Boolean.class))
+
+                    query.append(" BOOLEAN,");
 
             }
 
         }
-        System.out.println(query = query.substring(0, query.length() - 1) + ");");
+
+        System.out.println(query.deleteCharAt(query.length() - 1).append(");"));
     }
 
     @Override
     public <T> void Insert(Map<String, Object> hashMap) {
-        String query = "INSERT INTO ";
+        StringBuilder query = new StringBuilder();
+        query.append("INSERT INTO ");
         Iterator it = hashMap.entrySet().iterator();
-        int counter = 0;
         while (it.hasNext()) {
-            counter++;
+
             Map.Entry pair = (Map.Entry) it.next();
-            if (pair.getKey().equals("TableName"))
-                query = query + pair.getValue() + " VALUES(";
-
-            else {
-                if (pair.getValue().getClass().equals(String.class))
-                    query = query + "'" + pair.getValue() + "',";
-                else if (pair.getValue().getClass().equals(Boolean.class)) {
-                    if (pair.getValue().toString().equals(true))
-                        query = query + true + ",";
-                    else
-                        query = query + false + ",";
-
-                } else
-                    query = query + pair.getValue() + ",";
-
+            if (pair.getKey().equals("TableName")) {
+                query.append(pair.getValue());
+                query.append(" VALUES(");
+            } else {
+                if (pair.getValue().getClass().equals(String.class)) {
+                    query.append("'");
+                    query.append(pair.getValue());
+                    query.append("',");
+                } else if (pair.getValue().getClass().equals(Boolean.class)) {
+                    if (pair.getValue().toString().equals(true)) {
+                        query.append(true);
+                        query.append(",");
+                    } else {
+                        query.append(false);
+                        query.append(",");
+                    }
+                } else {
+                    query.append(pair.getValue());
+                    query.append(",");
+                }
             }
 
         }
 
 
-        System.out.println(query = query.substring(0, query.length() - 1) + ") RETURNING *;");
+        System.out.println(query.deleteCharAt(query.length() - 1).append(") RETURNING *;"));
     }
 
     @Override
     public <T> void Update(String tableName, String field, T newvalue) {
-        String query;
+        StringBuilder query = new StringBuilder();
+        query.append("UPDATE ");
+        query.append(tableName);
+        query.append(" SET ");
         if (newvalue.getClass().equals(Boolean.class)) {
-            query = "UPDATE " + tableName + " SET " + field + "=" + ((Boolean) newvalue ? true : false);
+
+            query.append(field);
+            query.append("=");
+            query.append((Boolean) newvalue ? true : false);
         } else if (newvalue.getClass().equals(String.class)) {
-            query = "UPDATE " + tableName + " SET " + field + "='" + newvalue;
+
+            query.append(field);
+            query.append("='");
+            query.append(newvalue);
+            query.append("'");
+
         } else {
-            query = "UPDATE " + tableName + " SET " + field + "=" + newvalue;
+
+            query.append(field);
+            query.append("=");
+            query.append(newvalue);
         }
-        System.out.println(query + " RETURNING " + field + ";");
+        query.append(" RETURNING ");
+        query.append(field);
+        query.append(";");
+        System.out.println(query);
     }
 
     @Override
     public <T> void Delete(String tableName, String fieldname, T conditionvalue) {
-        String query;
+        StringBuilder query = new StringBuilder();
+        query.append("DELETE FROM ");
+        query.append(tableName);
+        query.append(" WHERE ");
         if (conditionvalue.getClass().equals(Boolean.class)) {
-            query = "DELETE FROM " + tableName + " WHERE " + fieldname + "=" + ((Boolean) conditionvalue ? true : false);
+
+            query.append(fieldname);
+            query.append("=");
+            query.append((Boolean) conditionvalue ? true : false);
+
         } else if (conditionvalue.getClass().equals(String.class)) {
-            query = "DELETE FROM " + tableName + " WHERE " + fieldname + "='" + conditionvalue + "'";
+
+            query.append(fieldname);
+            query.append("='");
+            query.append(conditionvalue);
+            query.append("'");
         } else {
-            query = "DELETE FROM " + tableName + " WHERE " + fieldname + "=" + conditionvalue;
+
+            query.append(fieldname);
+            query.append("=");
+            query.append(conditionvalue);
+
         }
-        System.out.println(query + " RETURNING " + fieldname + ";");
+        query.append(" RETURNING ");
+        query.append(fieldname);
+        query.append(";");
+        System.out.println(query);
     }
 
     @Override
     public <T> void Find(String tableName, String fieldname, T conditionvalue, int limit) {
-        String query;
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT * FROM ");
+        query.append(tableName);
+        query.append(" WHERE ");
+        query.append(fieldname);
         if (conditionvalue.getClass().equals(Boolean.class)) {
-            query = "SELECT * FROM " + tableName + " WHERE " + fieldname + "=" + ((Boolean) conditionvalue ? true : false) + ";";
+
+            query.append("=");
+            query.append(((Boolean) conditionvalue ? true : false));
+
         } else if (conditionvalue.getClass().equals(String.class)) {
-            query = "SELECT * FROM " + tableName + " WHERE " + fieldname + "='" + conditionvalue + "';";
+
+            query.append("='");
+            query.append(conditionvalue);
+
         } else {
-            query = "SELECT * FROM " + tableName + " WHERE " + fieldname + "=" + conditionvalue + ";";
+
+            query.append("=");
+            query.append(conditionvalue);
+
         }
-        System.out.println(query + " LIMIT " + limit + ";");
+
+        query.append(" LIMIT ");
+        query.append(limit);
+        query.append(";");
+        System.out.println(query);
     }
 }
